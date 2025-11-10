@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-export default function Header(){
+export default function TopNav(){
   const [open, setOpen] = useState(false)
   const [isDark, setIsDark] = useState(true)
 
@@ -38,16 +38,22 @@ export default function Header(){
           <span className="text-sm font-semibold tracking-wider">VYRA</span>
         </div>
         <nav className="hidden md:flex items-center gap-6 text-sm">
-          <a href="#filters" className="text-slate-300 hover:text-white">Filtros</a>
-          <a href="#grid" className="text-slate-300 hover:text-white">Perfis</a>
+          <a href="#problem" className="text-slate-300 hover:text-white">Problema</a>
+          <a href="#demo" className="text-slate-300 hover:text-white">Demo</a>
+          <a href="#dir" className="text-slate-300 hover:text-white">Diretório</a>
+          <a href="#impact" className="text-slate-300 hover:text-white">Impacto</a>
+          <a href="#pricing" className="text-slate-300 hover:text-white">Planos</a>
           <button onClick={toggleTheme} className="btn">{isDark ? 'Claro' : 'Escuro'}</button>
         </nav>
         <button className="md:hidden btn" onClick={()=>setOpen(v=>!v)} aria-expanded={open}>Menu</button>
       </div>
       {open && (
         <div className="md:hidden px-4 pb-4 flex flex-col gap-2">
-          <a href="#filters" className="btn">Filtros</a>
-          <a href="#grid" className="btn">Perfis</a>
+          <a className="btn" href="#problem">Problema</a>
+          <a className="btn" href="#demo">Demo</a>
+          <a className="btn" href="#dir">Diretório</a>
+          <a className="btn" href="#impact">Impacto</a>
+          <a className="btn" href="#pricing">Planos</a>
           <button onClick={toggleTheme} className="btn">{isDark ? 'Claro' : 'Escuro'}</button>
         </div>
       )}
