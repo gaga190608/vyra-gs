@@ -2,13 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-:root{ --grad:linear-gradient(90deg,#8b5cf6,#f472b6,#22d3ee) }
-html{ scroll-behavior:smooth }
+:root { --grad: linear-gradient(90deg, #8b5cf6, #f472b6, #22d3ee); }
+html { scroll-behavior: smooth; }
 
-.glass{ @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-glass; }
-.badge{ @apply inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-xs text-slate-300; }
-.btn{ @apply inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-slate-100 hover:brightness-110; }
-.btn-primary{ background-image:var(--grad); @apply border-0 text-slate-900 font-semibold; }
-.card{ @apply glass rounded-2xl p-4; }
-.input{ @apply w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-400; }
-.select{ @apply input pr-8; }
+.glass { @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-glass; }
+.badge { @apply inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-xs text-slate-300; }
+.btn { @apply inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-slate-100 hover:brightness-110; }
+.btn-primary { background-image: var(--grad); @apply border-0 text-slate-900 font-semibold; }
+.card { @apply glass rounded-2xl p-4; }
+.input { @apply w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-400; }
+.select { @apply input pr-8; }
