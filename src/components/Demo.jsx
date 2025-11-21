@@ -31,7 +31,10 @@ const trendData = [
 export default function Demo() {
   const [tab, setTab] = useState("aluno");
 
-  const { data: careers = [], loading: careersLoading } = useCareers({ order_by: "score", limit: 10 });
+  const { data: careers = [], loading: careersLoading } = useCareers({
+    order_by: "score",
+    limit: 10,
+  });
 
   const demoData = useMemo(
     () => ({
@@ -61,9 +64,7 @@ export default function Demo() {
                 key={k}
                 onClick={() => setTab(k)}
                 className={`rounded-xl px-4 py-2 text-sm font-medium capitalize transition ${
-                  tab === k
-                    ? "btn-primary"
-                    : "btn text-slate-900 dark:text-slate-100"
+                  tab === k ? "btn-primary" : "btn text-slate-900 dark:text-slate-100"
                 }`}
               >
                 {k}
@@ -119,11 +120,10 @@ export default function Demo() {
                 *Dados ilustrativos para prototipagem.
               </div>
             </div>
+            
             <div className="grid content-start gap-4">
               <div className="p-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-2xl">
-                <p className="text-xs text-slate-600 dark:text-slate-400">
-                  Trilha recomendada
-                </p>
+                <p className="text-xs text-slate-600 dark:text-slate-400">Trilha recomendada</p>
                 <p className="mt-1 font-semibold text-slate-900 dark:text-white">
                   Especialista em IA Ética
                 </p>
@@ -136,10 +136,9 @@ export default function Demo() {
                 </ul>
               </div>
 
+              {/* ODS + Careers */}
               <div className="p-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-2xl">
-                <p className="text-xs text-slate-600 dark:text-slate-400">
-                  ODS afetados
-                </p>
+                <p className="text-xs text-slate-600 dark:text-slate-400">ODS afetados</p>
 
                 <div className="mt-2 flex flex-wrap gap-2 text-xs">
                   {[
@@ -154,18 +153,21 @@ export default function Demo() {
                   ))}
                 </div>
 
-                <div className="mt-3">
-                  <p className="text-xs text-slate-600 dark:text-slate-400">Careers em destaque</p>
+                <div className="mt-4">
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
+                    Carreiras em destaque
+                  </p>
+
                   {careersLoading ? (
-                    <div className="mt-2 text-sm text-slate-600 dark:text-slate-400">Carregando...</div>
+                    <div className="mt-2 text-sm">Carregando...</div>
                   ) : (
                     <ul className="mt-2 text-sm text-slate-700 dark:text-slate-300 space-y-1">
                       {careers.slice(0, 4).map((c) => (
-                        <li key={c.id}>
-                          <div className="flex items-baseline justify-between">
-                            <span>{c.title || c.name || c.id}</span>
-                            <span className="text-xs text-slate-500 dark:text-slate-400"> {c.score ?? c.value ?? ""}</span>
-                          </div>
+                        <li key={c.id} className="flex items-center justify-between">
+                          <span>{c.title ?? c.name ?? "Carreira"}</span>
+                          <span className="text-xs text-slate-500 dark:text-slate-400">
+                            {c.score ?? ""}
+                          </span>
                         </li>
                       ))}
                     </ul>
