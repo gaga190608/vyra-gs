@@ -11,7 +11,7 @@ import {
 
 const Card = ({ children, className = "" }) => (
   <div
-    className={`card p-6 md:p-8 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 ${className}`}
+    className={`card p-6 md:p-8 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-2xl ${className}`}
   >
     {children}
   </div>
@@ -28,6 +28,7 @@ const trendData = [
 
 export default function Demo() {
   const [tab, setTab] = useState("aluno");
+
   const demoData = useMemo(
     () => ({
       aluno: trendData,
@@ -49,13 +50,16 @@ export default function Demo() {
               Simule o painel e veja como as trilhas mudam conforme a validação do mercado.
             </p>
           </div>
+
           <div className="flex gap-2">
             {["aluno", "empresa", "governo"].map((k) => (
               <button
                 key={k}
                 onClick={() => setTab(k)}
-                className={`rounded-xl px-4 py-2 text-sm font-medium capitalize ${
-                  tab === k ? "btn-primary" : "btn"
+                className={`rounded-xl px-4 py-2 text-sm font-medium capitalize transition ${
+                  tab === k
+                    ? "btn-primary"
+                    : "btn text-slate-900 dark:text-slate-100"
                 }`}
               >
                 {k}
@@ -72,9 +76,23 @@ export default function Demo() {
                   data={demoData[tab]}
                   margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.15)" />
-                  <XAxis dataKey="year" stroke="#94a3b8" tickLine={false} axisLine={false} />
-                  <YAxis stroke="#94a3b8" tickLine={false} axisLine={false} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="rgba(148,163,184,0.15)"
+                  />
+                  <XAxis
+                    dataKey="year"
+                    stroke="#94a3b8"
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis
+                    stroke="#94a3b8"
+                    tickLine={false}
+                    axisLine={false}
+                  />
+
+                  {/* Tooltip */}
                   <Tooltip
                     contentStyle={{
                       background: "#0b1020",
@@ -83,6 +101,7 @@ export default function Demo() {
                       color: "#fff",
                     }}
                   />
+
                   <Line
                     type="monotone"
                     dataKey="iaEthics"
@@ -93,16 +112,23 @@ export default function Demo() {
                   />
                 </LineChart>
               </ResponsiveContainer>
+
               <div className="mt-3 text-xs text-slate-600 dark:text-slate-400">
                 *Dados ilustrativos para prototipagem.
               </div>
             </div>
+
+            {/* Cards laterais */}
             <div className="grid content-start gap-4">
-              <div className="card p-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700">
-                <p className="text-xs text-slate-600 dark:text-slate-400">Trilha recomendada</p>
+              {/* Trilha recomendada */}
+              <div className="p-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-2xl">
+                <p className="text-xs text-slate-600 dark:text-slate-400">
+                  Trilha recomendada
+                </p>
                 <p className="mt-1 font-semibold text-slate-900 dark:text-white">
                   Especialista em IA Ética
                 </p>
+
                 <ul className="mt-3 grid gap-2 text-sm text-slate-700 dark:text-slate-300 list-disc pl-5">
                   <li>Fundamentos de ML + Ética</li>
                   <li>Fairness, Bias & Explainability</li>
@@ -110,8 +136,11 @@ export default function Demo() {
                   <li>Projeto com dados públicos</li>
                 </ul>
               </div>
-              <div className="card p-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700">
-                <p className="text-xs text-slate-600 dark:text-slate-400">ODS afetados</p>
+              <div className="p-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-2xl">
+                <p className="text-xs text-slate-600 dark:text-slate-400">
+                  ODS afetados
+                </p>
+
                 <div className="mt-2 flex flex-wrap gap-2 text-xs">
                   {[
                     "ODS 4 — Educação",
