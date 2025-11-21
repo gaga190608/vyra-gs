@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import VyraLogo from "../assets/VyraLogo.jsx";
 
+const THEME_KEY = "vyra-theme";
+
 export default function TopNav() {
   const [open, setOpen] = useState(false);
   const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("vyra-theme");
-      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const saved = localStorage.getItem(THEME_KEY);
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
       const startDark = saved ? saved === "dark" : prefersDark;
+
       applyTheme(startDark);
       setIsDark(startDark);
     } catch (e) {
@@ -19,38 +23,27 @@ export default function TopNav() {
 
   function applyTheme(dark) {
     try {
-      const html = document.documentElement;
-      html.classList.toggle("dark", dark);
-      document.body.classList.toggle("bg-slate-950", dark);
-      document.body.classList.toggle("text-slate-100", dark);
-      document.body.classList.toggle("bg-slate-50", !dark);
-      document.body.classList.toggle("text-slate-900", !dark);
-
-      localStorage.setItem("vyra-theme", dark ? "dark" : "light");
+      document.documentElement.classList.toggle("dark", dark);
+      localStorage.setItem(THEME_KEY, dark ? "dark" : "light");
     } catch (e) {
       console.error("applyTheme falhou", e);
     }
   }
 
   function toggleTheme() {
-    try {
-      const html = document.documentElement;
-      const nowDark = !html.classList.contains("dark");
-      applyTheme(nowDark);
-      setIsDark(nowDark);
-    } catch (e) {
-      console.error("Theme toggle falhou", e);
-    }
+    const nowDark = !isDark;
+    applyTheme(nowDark);
+    setIsDark(nowDark);
   }
 
   const NavLink = ({ href, children }) => (
-    <a href={href} className="text-slate-300 hover:text-white">
+    <a href={href} className="text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white">
       {children}
     </a>
   );
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-black/5 dark:border-white/10 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 md:px-6">
         <div className="flex items-center gap-3">
           <VyraLogo className="h-7 w-7" />
@@ -68,8 +61,6 @@ export default function TopNav() {
           <button
             onClick={toggleTheme}
             className="btn inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium"
-            aria-pressed={!isDark}
-            aria-label="Alternar tema"
           >
             {isDark ? "Claro" : "Escuro"}
           </button>

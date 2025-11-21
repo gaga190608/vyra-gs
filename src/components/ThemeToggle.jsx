@@ -1,37 +1,35 @@
 import React, { useEffect, useState } from "react";
 
-const THEME_KEY = "vyra_theme";
+const THEME_KEY = "vyra-theme";
 
 export default function ThemeToggle({ className = "" }) {
-  const [isDark, setIsDark] = useState(() => {
-    try {
-      const saved = localStorage.getItem(THEME_KEY);
-      if (saved) return saved === "dark";
-      return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-    } catch {
-      return true;
-    }
-  });
+  const [mounted, setMounted] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    const html = document.documentElement;
-    const body = document.body;
-    if (isDark) {
-      html.classList.add("dark");
-      body.classList.remove("bg-slate-50", "text-slate-900");
-      body.classList.add("bg-slate-950", "text-slate-100");
-      localStorage.setItem(THEME_KEY, "dark");
-    } else {
-      html.classList.remove("dark");
-      body.classList.remove("bg-slate-950", "text-slate-100");
-      body.classList.add("bg-slate-50", "text-slate-900");
-      localStorage.setItem(THEME_KEY, "light");
-    }
-  }, [isDark]);
+    setMounted(true);
+    try {
+      const saved = localStorage.getItem(THEME_KEY);
+      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const initial = saved ? saved === "dark" : prefersDark;
+      setIsDark(initial);
+      document.documentElement.classList.toggle("dark", initial);
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    try {
+      document.documentElement.classList.toggle("dark", isDark);
+      localStorage.setItem(THEME_KEY, isDark ? "dark" : "light");
+    } catch {}
+  }, [isDark, mounted]);
 
   function toggle() {
     setIsDark((v) => !v);
   }
+
+  if (!mounted) return null; 
 
   return (
     <button
