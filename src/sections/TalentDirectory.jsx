@@ -17,11 +17,24 @@ export default function TalentDirectory() {
   useEffect(() => {
     api.getUsers()
       .then((data) => {
-        setProfiles(data || []);
+        if (Array.isArray(data) && data.length > 0) {
+          setProfiles(data);
+        } else {
+          throw new Error("API retornou vazio — usando JSON local");
+        }
       })
       .catch((err) => {
-        console.error("Erro ao carregar usuários:", err);
-        setProfiles([]);
+        console.warn("API indisponível, carregando JSON local:", err);
+        fetch("/data/profiles.json")
+          .then((r) => r.json())
+          .then((json) => {
+            console.log("Usando perfis do JSON local:", json.length);
+            setProfiles(json);
+          })
+          .catch((e) => {
+            console.error("Erro ao carregar JSON local:", e);
+            setProfiles([]);
+          });
       });
   }, []);
 
