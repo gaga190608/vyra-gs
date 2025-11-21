@@ -15,31 +15,13 @@ async function request(path, options = {}) {
 }
 
 export const api = {
-  health() {
-    return request("/health");
+  getUsers() {
+    return request("/v1/users");
   },
 
   getCareers(params = {}) {
     const qs = new URLSearchParams(params).toString();
     return request(`/v1/careers?${qs}`);
-  },
-
-  updateTrends(body) {
-    return request(`/v1/trends`, {
-      method: "PUT",
-      body: JSON.stringify(body),
-    });
-  },
-
-  getUsers() {
-    return request("/v1/users");
-  },
-
-  createUser(body) {
-    return request("/v1/users", {
-      method: "POST",
-      body: JSON.stringify(body),
-    });
   },
 
   recommend(body) {
@@ -49,12 +31,17 @@ export const api = {
     });
   },
 
-  persist() {
-    return request("/v1/persist", { method: "POST" });
+  createUser(body) {
+    return request("/v1/users", {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
   },
 
-  getRecommendationsReport(params = {}) {
-    const qs = new URLSearchParams(params).toString();
-    return request(`/v1/reports/recommendations?${qs}`);
+  updateTrends(body) {
+    return request("/v1/trends", {
+      method: "PUT",
+      body: JSON.stringify(body),
+    });
   },
 };

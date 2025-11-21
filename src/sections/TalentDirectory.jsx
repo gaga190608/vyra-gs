@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import DirectorySearchBar from "../components/DirectorySearchBar.jsx";
 import ProfileCard from "../components/ProfileCard.jsx";
 import ProfileModal from "../components/ProfileModal.jsx";
+import { api } from "../lib/api";
 
 export default function TalentDirectory() {
   const [profiles, setProfiles] = useState([]);
@@ -14,11 +15,12 @@ export default function TalentDirectory() {
   const [selected, setSelected] = useState(null);
 
   useEffect(() => {
-    fetch("/data/profiles.json")
-      .then((r) => r.json())
-      .then(setProfiles)
+    api.getUsers()
+      .then((data) => {
+        setProfiles(data || []);
+      })
       .catch((err) => {
-        console.error("Falha ao carregar perfis:", err);
+        console.error("Erro ao carregar usuários:", err);
         setProfiles([]);
       });
   }, []);
@@ -27,18 +29,23 @@ export default function TalentDirectory() {
     () => Array.from(new Set(profiles.map((p) => p.city))).filter(Boolean).sort(),
     [profiles]
   );
+
   const areas = useMemo(
     () => Array.from(new Set(profiles.map((p) => p.area))).filter(Boolean).sort(),
     [profiles]
   );
+
   const techs = useMemo(
     () =>
-      Array.from(new Set(profiles.flatMap((p) => (p.skills || [])))).filter(Boolean).sort(),
+      Array.from(new Set(profiles.flatMap((p) => p.skills || [])))
+        .filter(Boolean)
+        .sort(),
     [profiles]
   );
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
+
     let arr = profiles.filter((p) => {
       const matchesQuery =
         !q ||
@@ -46,45 +53,33 @@ export default function TalentDirectory() {
           .join(" ")
           .toLowerCase()
           .includes(q);
+
       const matchesCity = !city || p.city === city;
       const matchesArea = !area || p.area === area;
       const matchesTech = !tech || (p.skills || []).includes(tech);
+
       return matchesQuery && matchesCity && matchesArea && matchesTech;
     });
 
-    if (sort === "name") {
-      arr = arr.slice().sort((a, b) => a.name.localeCompare(b.name));
-    } else if (sort === "city") {
-      arr = arr.slice().sort((a, b) => (a.city || "").localeCompare(b.city || ""));
-    }
+    if (sort === "name") arr = arr.slice().sort((a, b) => a.name.localeCompare(b.name));
+    if (sort === "city") arr = arr.slice().sort((a, b) => (a.city || "").localeCompare(b.city || ""));
+
     return arr;
   }, [profiles, query, city, area, tech, sort]);
 
   return (
-    <section id="diretorio" className="bg-slate-50 dark:bg-slate-950 py-16">
+    <section className="bg-slate-50 dark:bg-slate-950 py-16">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6">
-          Diretório de Talentos
-        </h2>
-
         <DirectorySearchBar
-          query={query}
-          setQuery={setQuery}
-          city={city}
-          setCity={setCity}
-          cities={cities}
-          area={area}
-          setArea={setArea}
-          areas={areas}
-          tech={tech}
-          setTech={setTech}
-          techs={techs}
-          sort={sort}
-          setSort={setSort}
-          view={view}
-          setView={setView}
+          query={query} setQuery={setQuery}
+          city={city} setCity={setCity} cities={cities}
+          area={area} setArea={setArea} areas={areas}
+          tech={tech} setTech={setTech} techs={techs}
+          sort={sort} setSort={setSort}
+          view={view} setView={setView}
           count={filtered.length}
         />
+
         <div
           className={`mt-6 ${
             view === "cards"
@@ -93,7 +88,12 @@ export default function TalentDirectory() {
           }`}
         >
           {filtered.map((p) => (
-            <ProfileCard key={p.id} profile={p} view={view} onOpen={() => setSelected(p)} />
+            <ProfileCard
+              key={p.id}
+              profile={p}
+              view={view}
+              onOpen={() => setSelected(p)}
+            />
           ))}
         </div>
 
@@ -106,7 +106,12 @@ export default function TalentDirectory() {
           </div>
         )}
 
-        {selected && <ProfileModal profile={selected} onClose={() => setSelected(null)} />}
+        {selected && (
+          <ProfileModal
+            profile={selected}
+            onClose={() => setSelected(null)}
+          />
+        )}
       </div>
     </section>
   );
