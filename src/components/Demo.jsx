@@ -9,6 +9,8 @@ import {
   Tooltip,
 } from "recharts";
 
+import { useCareers } from "../lib/hooks";
+
 const Card = ({ children, className = "" }) => (
   <div
     className={`card p-6 md:p-8 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-2xl ${className}`}
@@ -28,6 +30,8 @@ const trendData = [
 
 export default function Demo() {
   const [tab, setTab] = useState("aluno");
+
+  const { data: careers = [], loading: careersLoading } = useCareers({ order_by: "score", limit: 10 });
 
   const demoData = useMemo(
     () => ({
@@ -91,8 +95,6 @@ export default function Demo() {
                     tickLine={false}
                     axisLine={false}
                   />
-
-                  {/* Tooltip */}
                   <Tooltip
                     contentStyle={{
                       background: "#0b1020",
@@ -117,10 +119,7 @@ export default function Demo() {
                 *Dados ilustrativos para prototipagem.
               </div>
             </div>
-
-            {/* Cards laterais */}
             <div className="grid content-start gap-4">
-              {/* Trilha recomendada */}
               <div className="p-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-2xl">
                 <p className="text-xs text-slate-600 dark:text-slate-400">
                   Trilha recomendada
@@ -136,6 +135,7 @@ export default function Demo() {
                   <li>Projeto com dados públicos</li>
                 </ul>
               </div>
+
               <div className="p-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-2xl">
                 <p className="text-xs text-slate-600 dark:text-slate-400">
                   ODS afetados
@@ -152,6 +152,24 @@ export default function Demo() {
                       {t}
                     </span>
                   ))}
+                </div>
+
+                <div className="mt-3">
+                  <p className="text-xs text-slate-600 dark:text-slate-400">Careers em destaque</p>
+                  {careersLoading ? (
+                    <div className="mt-2 text-sm text-slate-600 dark:text-slate-400">Carregando...</div>
+                  ) : (
+                    <ul className="mt-2 text-sm text-slate-700 dark:text-slate-300 space-y-1">
+                      {careers.slice(0, 4).map((c) => (
+                        <li key={c.id}>
+                          <div className="flex items-baseline justify-between">
+                            <span>{c.title || c.name || c.id}</span>
+                            <span className="text-xs text-slate-500 dark:text-slate-400"> {c.score ?? c.value ?? ""}</span>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
             </div>
