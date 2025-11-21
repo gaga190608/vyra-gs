@@ -15,7 +15,7 @@ export default function Footer() {
           </div>
           <div className="flex gap-3 md:justify-end">
             <a href="#demo" className="btn-primary btn">Usar Demo</a>
-            <a href="#" className="btn">Política de IA</a>
+            <a  href="#" className="btn text-slate-900 dark:text-slate-100 hover:text-slate-950 dark:hover:text-white">Política de IA </a>
           </div>
         </div>
 
