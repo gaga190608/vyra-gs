@@ -10,12 +10,14 @@ export default function TopNav() {
   useEffect(() => {
     try {
       const saved = localStorage.getItem(THEME_KEY);
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const prefersDark =
+        typeof window !== "undefined" &&
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
       const startDark = saved ? saved === "dark" : prefersDark;
       applyTheme(startDark);
-      setIsDark(startDark);
     } catch (e) {
-      console.error("Erro ao carregar tema:", e);
+      console.error("Erro ao carregar tema:");
     }
   }, []);
 
@@ -51,7 +53,6 @@ export default function TopNav() {
           <span className="text-sm font-semibold tracking-wider text-slate-900 dark:text-white">VYRA</span>
         </div>
 
-        {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-6 text-sm">
           <NavLink href="#problema">Problema</NavLink>
           <NavLink href="#demo">Demo</NavLink>
@@ -62,7 +63,7 @@ export default function TopNav() {
 
           <button
             onClick={toggleTheme}
-            className="btn inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium"
+            className="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100"
             aria-pressed={!isDark}
             aria-label="Alternar tema"
           >
@@ -70,9 +71,8 @@ export default function TopNav() {
           </button>
         </nav>
 
-        {/* Mobile menu button */}
         <button
-          className="btn md:hidden"
+          className="md:hidden px-3 py-2 rounded-lg text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/60"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="mobile-menu"
@@ -80,17 +80,13 @@ export default function TopNav() {
           Menu
         </button>
       </div>
-
-      {/* MOBILE MENU — renderiza só em small screens (md:hidden garante isso) */}
       {open && (
         <div className="md:hidden" role="dialog" aria-modal="true">
-          {/* Backdrop: escuro translúcido (melhor legibilidade em desktop também) */}
           <div
             className="fixed inset-0 z-40 bg-black/40 dark:bg-black/60"
             onClick={() => setOpen(false)}
           />
 
-          {/* Panel */}
           <div className="fixed top-14 inset-x-4 z-50 mx-auto max-w-md rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 p-4 shadow-lg">
             <div className="flex flex-col gap-2">
               {[
