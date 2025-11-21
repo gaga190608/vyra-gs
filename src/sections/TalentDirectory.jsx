@@ -61,8 +61,12 @@ export default function TalentDirectory() {
   }, [profiles, query, city, area, tech, sort]);
 
   return (
-    <section className="bg-slate-50 dark:bg-slate-950 py-16">
+    <section id="diretorio" className="bg-slate-50 dark:bg-slate-950 py-16">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
+        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6">
+          Diretório de Talentos
+        </h2>
+
         <DirectorySearchBar
           query={query}
           setQuery={setQuery}
@@ -81,7 +85,6 @@ export default function TalentDirectory() {
           setView={setView}
           count={filtered.length}
         />
-
         <div
           className={`mt-6 ${
             view === "cards"
