@@ -5,6 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VYRA • Rede Profissional do Futuro</title>
   </head>
+<script>
+  (function() {
+    try {
+      const saved = localStorage.getItem('vyra-theme');
+      const html = document.documentElement;
+      if (saved === 'dark') {
+        html.classList.add('dark');
+      } else if (saved === 'light') {
+        html.classList.remove('dark');
+      } else {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) html.classList.add('dark');
+      }
+    } catch (e) {
+    }
+  })();
+</script>
   <body class="bg-slate-950 text-slate-100">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
