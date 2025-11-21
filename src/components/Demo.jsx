@@ -64,7 +64,9 @@ export default function Demo() {
                 key={k}
                 onClick={() => setTab(k)}
                 className={`rounded-xl px-4 py-2 text-sm font-medium capitalize transition ${
-                  tab === k ? "btn-primary" : "btn text-slate-900 dark:text-slate-100"
+                  tab === k
+                    ? "btn-primary"
+                    : "btn !bg-transparent !text-black dark:!text-white hover:bg-slate-200 dark:hover:bg-slate-800"
                 }`}
               >
                 {k}
@@ -120,7 +122,7 @@ export default function Demo() {
                 *Dados ilustrativos para prototipagem.
               </div>
             </div>
-            
+
             <div className="grid content-start gap-4">
               <div className="p-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-2xl">
                 <p className="text-xs text-slate-600 dark:text-slate-400">Trilha recomendada</p>
@@ -136,7 +138,7 @@ export default function Demo() {
                 </ul>
               </div>
 
-              {/* ODS + Careers */}
+          
               <div className="p-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-2xl">
                 <p className="text-xs text-slate-600 dark:text-slate-400">ODS afetados</p>
 
@@ -147,7 +149,10 @@ export default function Demo() {
                     "ODS 9 — Inovação",
                     "ODS 10 — Redução desigualdades",
                   ].map((t) => (
-                    <span key={t} className="badge">
+                    <span
+                      key={t}
+                      className="badge !bg-slate-100 !text-slate-700 dark:!bg-slate-700 dark:!text-slate-300 border border-slate-200 dark:border-slate-600"
+                    >
                       {t}
                     </span>
                   ))}
