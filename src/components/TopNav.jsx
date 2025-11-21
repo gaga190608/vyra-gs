@@ -6,32 +6,44 @@ export default function TopNav() {
   const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
-    const saved = localStorage.getItem("vyra-theme");
-    if (saved === "light") {
-      document.documentElement.classList.remove("dark");
-      document.body.classList.remove("bg-slate-950", "text-slate-100");
-      document.body.classList.add("bg-slate-50", "text-slate-900");
-      setIsDark(false);
+    try {
+      const saved = localStorage.getItem("vyra-theme");
+      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const startDark = saved ? saved === "dark" : prefersDark;
+      applyTheme(startDark);
+      setIsDark(startDark);
+    } catch (e) {
+      console.error("Erro ao carregar tema:", e);
     }
   }, []);
 
-  function toggleTheme() {
-    const html = document.documentElement;
-    const nowDark = !html.classList.contains("dark");
-    html.classList.toggle("dark");
-    setIsDark(nowDark);
-    if (nowDark) {
-      document.body.classList.add("bg-slate-950", "text-slate-100");
-      document.body.classList.remove("bg-slate-50", "text-slate-900");
-      localStorage.setItem("vyra-theme", "dark");
-    } else {
-      document.body.classList.remove("bg-slate-950", "text-slate-100");
-      document.body.classList.add("bg-slate-50", "text-slate-900");
-      localStorage.setItem("vyra-theme", "light");
+  function applyTheme(dark) {
+    try {
+      const html = document.documentElement;
+      html.classList.toggle("dark", dark);
+      document.body.classList.toggle("bg-slate-950", dark);
+      document.body.classList.toggle("text-slate-100", dark);
+      document.body.classList.toggle("bg-slate-50", !dark);
+      document.body.classList.toggle("text-slate-900", !dark);
+
+      localStorage.setItem("vyra-theme", dark ? "dark" : "light");
+    } catch (e) {
+      console.error("applyTheme falhou", e);
     }
   }
 
-  const Link = ({ href, children }) => (
+  function toggleTheme() {
+    try {
+      const html = document.documentElement;
+      const nowDark = !html.classList.contains("dark");
+      applyTheme(nowDark);
+      setIsDark(nowDark);
+    } catch (e) {
+      console.error("Theme toggle falhou", e);
+    }
+  }
+
+  const NavLink = ({ href, children }) => (
     <a href={href} className="text-slate-300 hover:text-white">
       {children}
     </a>
@@ -44,27 +56,37 @@ export default function TopNav() {
           <VyraLogo className="h-7 w-7" />
           <span className="text-sm font-semibold tracking-wider">VYRA</span>
         </div>
+
         <nav className="hidden items-center gap-6 text-sm md:flex">
-          <Link href="#problema">Problema</Link>
-          <Link href="#demo">Demo</Link>
-          <Link href="#diretorio">Diretório</Link>
-          <Link href="#impacto">Impacto</Link>
-          <Link href="#planos">Planos</Link>
-          <Link href="#faq">FAQ</Link>
-          <button onClick={toggleTheme} className="btn">
+          <NavLink href="#problema">Problema</NavLink>
+          <NavLink href="#demo">Demo</NavLink>
+          <NavLink href="#diretorio">Diretório</NavLink>
+          <NavLink href="#impacto">Impacto</NavLink>
+          <NavLink href="#planos">Planos</NavLink>
+          <NavLink href="#faq">FAQ</NavLink>
+
+          <button
+            onClick={toggleTheme}
+            className="btn inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium"
+            aria-pressed={!isDark}
+            aria-label="Alternar tema"
+          >
             {isDark ? "Claro" : "Escuro"}
           </button>
         </nav>
+
         <button
           className="btn md:hidden"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
+          aria-controls="mobile-menu"
         >
           Menu
         </button>
       </div>
+
       {open && (
-        <div className="grid gap-2 px-4 pb-3 md:hidden">
+        <div id="mobile-menu" className="grid gap-2 px-4 pb-3 md:hidden">
           {[
             ["#problema", "Problema"],
             ["#demo", "Demo"],
@@ -77,6 +99,7 @@ export default function TopNav() {
               {t}
             </a>
           ))}
+
           <button onClick={toggleTheme} className="btn">
             {isDark ? "Claro" : "Escuro"}
           </button>
